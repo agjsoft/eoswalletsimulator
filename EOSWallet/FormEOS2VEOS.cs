@@ -30,5 +30,10 @@ namespace EOSWallet
 
             textBox1.Text = Define.Convert(MyCurrentEOS);
         }
+
+        private void btnOK_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

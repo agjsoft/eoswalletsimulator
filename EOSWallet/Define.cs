@@ -5,6 +5,8 @@ namespace EOSWallet
     public static class Define
     {
         public static int MyUserId = 50;
+        public static int ConvertStep = 26;
+        public static int ConvertTimeSecond = 60;
         private static string[] FirstWord = new string[] { "큰", "작은", "늦은", "늙은", "파란", "빨간", "적은",
             "짧은", "긴", "노란", "검은", "재미있는", "재미없는", "밝은", "어두운", "얇은", "두꺼운", "젊은",
             "빠른", "능숙한", "어수룩한", "매력있는", "매력없는", "착한", "나쁜"};
@@ -39,6 +41,21 @@ namespace EOSWallet
                 ret = "0" + ret;
             }
             return ret;
+        }
+
+        public static string SecondsToMessage(int sec)
+        {
+            var span = new TimeSpan(0, 0, sec);
+            string msg = "";
+            if (0 < span.Days)
+                msg += $"{span.Days}일";
+            if (0 < span.Hours)
+                msg += $"{span.Hours}시간";
+            if (0 < span.Minutes)
+                msg += $"{span.Minutes}분";
+            if (0 < span.Seconds)
+                msg += $"{span.Seconds}초";
+            return msg;
         }
     }
 }
