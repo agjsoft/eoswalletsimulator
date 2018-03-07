@@ -41,7 +41,8 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormVEOS2EOS";
-            this.Text = "FormVEOS2EOS";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "VEOS > EOS 전환";
             this.ResumeLayout(false);
 
         }

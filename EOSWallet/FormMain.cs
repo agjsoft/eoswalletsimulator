@@ -260,12 +260,12 @@ namespace EOSWallet
 
         private void btnEOS2VEOS_Click(object sender, EventArgs e)
         {
-
+            new FormEOS2VEOS().ShowDialog();
         }
 
         private void btnVEOS2EOS_Click(object sender, EventArgs e)
         {
-
+            new FormVEOS2EOS().ShowDialog();
         }
     }
 }
