@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 
 namespace EOSWallet
 {
     public partial class FormMain : Form
     {
+        private int MyUserId = 50;
         private string SqliteFileName = "eos.db";
         private SQLiteConnection SqlCon = new SQLiteConnection("Data Source=eos.db");
         private Random Rn = new Random();
@@ -63,19 +65,12 @@ namespace EOSWallet
                 SqlCon.Open();
 
                 RunQuery(
-                    "CREATE TABLE MyEOS (" +
+                    "CREATE TABLE Me (" +
                         "EOS INTEGER NOT NULL," +
                         "VTIME DATETIME NOT NULL" +
                     ")");
 
-                RunQuery($"INSERT INTO MyEOS (EOS, VTIME) VALUES (450000, '{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}')");
-
-                RunQuery(
-                    "CREATE TABLE MyVEOS (" +
-                        "VEOS INTEGER NOT NULL" +
-                    ")");
-
-                RunQuery("INSERT INTO MyVEOS (VEOS) VALUES (0)");
+                RunQuery($"INSERT INTO Me (EOS, VTIME) VALUES (45000000000000, '{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}')");
 
                 RunQuery(
                     "CREATE TABLE User (" +
@@ -83,6 +78,8 @@ namespace EOSWallet
                         "Name TEXT NOT NULL," +
                         "VEOS INTEGER NOT NULL" +
                     ")");
+
+                RunQuery($"INSERT INTO User (Id, Name, VEOS) VALUES ({MyUserId}, '나자신', 0)");
 
                 map.Clear();
                 for (int i = 0; i < 300;)
@@ -140,21 +137,37 @@ namespace EOSWallet
                         long VEOS = 0;
                         long VEOSing = 0;
 
-                        var rdr = new SQLiteCommand("SELECT EOS, VTIME FROM My", SqlCon).ExecuteReader();
+                        var rdr = new SQLiteCommand("SELECT EOS, VTIME FROM Me", SqlCon).ExecuteReader();
                         while (rdr.Read())
                         {
                             long value = rdr.GetInt64(0);
                             DateTime vtime = rdr.GetDateTime(1);
 
-                            if (vtime < DateTime.Now)
+                            if (DateTime.Now < vtime)
                             {
-
+                                EOSing += value;
                             }
                             else
                             {
-
+                                EOS += value;
                             }
                         }
+
+                        rdr = new SQLiteCommand($"SELECT VEOS FROM Vote WHERE UserId = {MyUserId}", SqlCon).ExecuteReader();
+                        while (rdr.Read())
+                        {
+                            VEOSing += rdr.GetInt64(0);
+                        }
+
+                        rdr = new SQLiteCommand($"SELECT VEOS FROM User WHERE Id = {MyUserId}", SqlCon).ExecuteReader();
+                        rdr.Read();
+                        VEOS = rdr.GetInt64(0);
+
+                        lbEOS.Text = Convert(EOS);
+                        lbEOSing.Text = Convert(EOSing);
+                        lbVEOS.Text = Convert(VEOS);
+                        lbVEOSing.Text = Convert(VEOSing);
+                        lbTotal.Text = Convert(EOS + EOSing + VEOS + VEOSing);
                     }
                     break;
                 case 3: // BP 투표
@@ -164,6 +177,27 @@ namespace EOSWallet
                     break;
             }
             SqlCon.Close();
+        }
+
+        private string Convert(long val)
+        {
+            var chArr = val.ToString().ToCharArray();
+            string ret = "";
+            int cnt = 0;
+            for (int i = chArr.Length - 1; i >= 0; i--, cnt++)
+            {
+                if (cnt == 8)
+                    ret = "." + ret;
+                ret = chArr[i] + ret;
+            }
+            int v = 9 - ret.Length;
+            for (int i = 0; i < v; i++)
+            {
+                if (i == v - 1)
+                    ret = "." + ret;
+                ret = "0" + ret;
+            }
+            return ret;
         }
     }
 }

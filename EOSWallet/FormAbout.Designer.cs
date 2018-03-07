@@ -54,7 +54,7 @@
             this.MinimizeBox = false;
             this.Name = "FormAbout";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "이오스 월렛 시뮬레이터 정보";
+            this.Text = "이오스 지갑 시뮬레이터 정보";
             this.ResumeLayout(false);
 
         }
