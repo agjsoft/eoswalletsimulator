@@ -70,10 +70,12 @@
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.투표하기ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.투표철회하기ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.btnEOS2VEOS = new System.Windows.Forms.Button();
+            this.btnVEOS2EOS = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.lbLine.SuspendLayout();
@@ -365,6 +367,8 @@
             // 
             // tabPage4
             // 
+            this.tabPage4.Controls.Add(this.btnVEOS2EOS);
+            this.tabPage4.Controls.Add(this.btnEOS2VEOS);
             this.tabPage4.Controls.Add(this.label14);
             this.tabPage4.Controls.Add(this.label13);
             this.tabPage4.Controls.Add(this.label12);
@@ -470,6 +474,26 @@
             this.columnHeader4.Text = "소개글";
             this.columnHeader4.Width = 250;
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.투표하기ToolStripMenuItem,
+            this.투표철회하기ToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(147, 48);
+            // 
+            // 투표하기ToolStripMenuItem
+            // 
+            this.투표하기ToolStripMenuItem.Name = "투표하기ToolStripMenuItem";
+            this.투표하기ToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.투표하기ToolStripMenuItem.Text = "투표하기";
+            // 
+            // 투표철회하기ToolStripMenuItem
+            // 
+            this.투표철회하기ToolStripMenuItem.Name = "투표철회하기ToolStripMenuItem";
+            this.투표철회하기ToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.투표철회하기ToolStripMenuItem.Text = "투표철회하기";
+            // 
             // statusStrip1
             // 
             this.statusStrip1.Location = new System.Drawing.Point(0, 536);
@@ -478,25 +502,25 @@
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
-            // contextMenuStrip1
+            // btnEOS2VEOS
             // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.투표하기ToolStripMenuItem,
-            this.투표철회하기ToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 70);
+            this.btnEOS2VEOS.Location = new System.Drawing.Point(8, 58);
+            this.btnEOS2VEOS.Name = "btnEOS2VEOS";
+            this.btnEOS2VEOS.Size = new System.Drawing.Size(108, 77);
+            this.btnEOS2VEOS.TabIndex = 6;
+            this.btnEOS2VEOS.Text = "EOS > VEOS 전환";
+            this.btnEOS2VEOS.UseVisualStyleBackColor = true;
+            this.btnEOS2VEOS.Click += new System.EventHandler(this.btnEOS2VEOS_Click);
             // 
-            // 투표하기ToolStripMenuItem
+            // btnVEOS2EOS
             // 
-            this.투표하기ToolStripMenuItem.Name = "투표하기ToolStripMenuItem";
-            this.투표하기ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.투표하기ToolStripMenuItem.Text = "투표하기";
-            // 
-            // 투표철회하기ToolStripMenuItem
-            // 
-            this.투표철회하기ToolStripMenuItem.Name = "투표철회하기ToolStripMenuItem";
-            this.투표철회하기ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.투표철회하기ToolStripMenuItem.Text = "투표철회하기";
+            this.btnVEOS2EOS.Location = new System.Drawing.Point(8, 143);
+            this.btnVEOS2EOS.Name = "btnVEOS2EOS";
+            this.btnVEOS2EOS.Size = new System.Drawing.Size(108, 77);
+            this.btnVEOS2EOS.TabIndex = 7;
+            this.btnVEOS2EOS.Text = "VEOS > EOS 전환";
+            this.btnVEOS2EOS.UseVisualStyleBackColor = true;
+            this.btnVEOS2EOS.Click += new System.EventHandler(this.btnVEOS2EOS_Click);
             // 
             // FormMain
             // 
@@ -573,6 +597,8 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem 투표하기ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 투표철회하기ToolStripMenuItem;
+        private System.Windows.Forms.Button btnVEOS2EOS;
+        private System.Windows.Forms.Button btnEOS2VEOS;
     }
 }
 

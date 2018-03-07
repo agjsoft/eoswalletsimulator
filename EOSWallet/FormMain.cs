@@ -185,7 +185,8 @@ namespace EOSWallet
                             {
                                 Name = name,
                                 Intro = intro,
-                                Score = 0
+                                Score = 0,
+                                MyVote = 0
                             });
                         }
                         rdr.Close();
@@ -196,6 +197,15 @@ namespace EOSWallet
                             int id = rdr.GetInt32(0);
                             long score = rdr.GetInt64(1);
                             nodeMap[id].Score = score;
+                        }
+                        rdr.Close();
+
+                        rdr = new SQLiteCommand($"SELECT NodeId, VEOS FROM Vote WHERE UserId = {MyUserId}", SqlCon).ExecuteReader();
+                        while (rdr.Read())
+                        {
+                            int id = rdr.GetInt32(0);
+                            long score = rdr.GetInt64(1);
+                            nodeMap[id].MyVote = score;
                         }
                         rdr.Close();
 
@@ -224,6 +234,7 @@ namespace EOSWallet
             public string Name;
             public string Intro;
             public long Score;
+            public long MyVote;
         }
 
         private string Convert(long val)
@@ -245,6 +256,16 @@ namespace EOSWallet
                 ret = "0" + ret;
             }
             return ret;
+        }
+
+        private void btnEOS2VEOS_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnVEOS2EOS_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
