@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.파일FToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -63,17 +64,21 @@
             this.label12 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.lvNodeList = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.투표하기ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.투표철회하기ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.lbLine.SuspendLayout();
             this.tabPage4.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -365,7 +370,7 @@
             this.tabPage4.Controls.Add(this.label12);
             this.tabPage4.Controls.Add(this.label11);
             this.tabPage4.Controls.Add(this.checkBox1);
-            this.tabPage4.Controls.Add(this.listView1);
+            this.tabPage4.Controls.Add(this.lvNodeList);
             this.tabPage4.Location = new System.Drawing.Point(4, 49);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Size = new System.Drawing.Size(796, 453);
@@ -419,20 +424,23 @@
             this.checkBox1.Text = "내가 투표한 노드만 보기";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
-            // listView1
+            // lvNodeList
             // 
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.lvNodeList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2,
             this.columnHeader3,
             this.columnHeader5,
             this.columnHeader4});
-            this.listView1.Location = new System.Drawing.Point(130, 33);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(658, 378);
-            this.listView1.TabIndex = 0;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
+            this.lvNodeList.ContextMenuStrip = this.contextMenuStrip1;
+            this.lvNodeList.FullRowSelect = true;
+            this.lvNodeList.GridLines = true;
+            this.lvNodeList.Location = new System.Drawing.Point(130, 33);
+            this.lvNodeList.Name = "lvNodeList";
+            this.lvNodeList.Size = new System.Drawing.Size(658, 378);
+            this.lvNodeList.TabIndex = 0;
+            this.lvNodeList.UseCompatibleStateImageBehavior = false;
+            this.lvNodeList.View = System.Windows.Forms.View.Details;
             // 
             // columnHeader1
             // 
@@ -455,12 +463,12 @@
             // 
             this.columnHeader5.Text = "내 투표수";
             this.columnHeader5.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.columnHeader5.Width = 70;
+            this.columnHeader5.Width = 90;
             // 
             // columnHeader4
             // 
             this.columnHeader4.Text = "소개글";
-            this.columnHeader4.Width = 350;
+            this.columnHeader4.Width = 250;
             // 
             // statusStrip1
             // 
@@ -469,6 +477,26 @@
             this.statusStrip1.Size = new System.Drawing.Size(804, 22);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.투표하기ToolStripMenuItem,
+            this.투표철회하기ToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 70);
+            // 
+            // 투표하기ToolStripMenuItem
+            // 
+            this.투표하기ToolStripMenuItem.Name = "투표하기ToolStripMenuItem";
+            this.투표하기ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.투표하기ToolStripMenuItem.Text = "투표하기";
+            // 
+            // 투표철회하기ToolStripMenuItem
+            // 
+            this.투표철회하기ToolStripMenuItem.Name = "투표철회하기ToolStripMenuItem";
+            this.투표철회하기ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.투표철회하기ToolStripMenuItem.Text = "투표철회하기";
             // 
             // FormMain
             // 
@@ -493,6 +521,7 @@
             this.lbLine.PerformLayout();
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -527,7 +556,7 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.ListView lvNodeList;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
@@ -541,6 +570,9 @@
         private System.Windows.Forms.Label lbEOSing;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.ColumnHeader columnHeader5;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem 투표하기ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 투표철회하기ToolStripMenuItem;
     }
 }
 

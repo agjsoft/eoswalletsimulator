@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.IO;
-using System.Text;
 using System.Windows.Forms;
 
 namespace EOSWallet
@@ -152,16 +151,19 @@ namespace EOSWallet
                                 EOS += value;
                             }
                         }
+                        rdr.Close();
 
                         rdr = new SQLiteCommand($"SELECT VEOS FROM Vote WHERE UserId = {MyUserId}", SqlCon).ExecuteReader();
                         while (rdr.Read())
                         {
                             VEOSing += rdr.GetInt64(0);
                         }
+                        rdr.Close();
 
                         rdr = new SQLiteCommand($"SELECT VEOS FROM User WHERE Id = {MyUserId}", SqlCon).ExecuteReader();
                         rdr.Read();
                         VEOS = rdr.GetInt64(0);
+                        rdr.Close();
 
                         lbEOS.Text = Convert(EOS);
                         lbEOSing.Text = Convert(EOSing);
@@ -172,11 +174,56 @@ namespace EOSWallet
                     break;
                 case 3: // BP 투표
                     {
+                        var nodeMap = new Dictionary<int, Node>();
+                        var rdr = new SQLiteCommand("SELECT Id, Name, Intro FROM Node", SqlCon).ExecuteReader();
+                        while (rdr.Read())
+                        {
+                            int id = rdr.GetInt32(0);
+                            string name = rdr.GetString(1);
+                            string intro = rdr.GetString(2);
+                            nodeMap.Add(id, new Node()
+                            {
+                                Name = name,
+                                Intro = intro,
+                                Score = 0
+                            });
+                        }
+                        rdr.Close();
 
+                        rdr = new SQLiteCommand("SELECT NodeId, SUM(VEOS) FROM Vote GROUP BY NodeId", SqlCon).ExecuteReader();
+                        while (rdr.Read())
+                        {
+                            int id = rdr.GetInt32(0);
+                            long score = rdr.GetInt64(1);
+                            nodeMap[id].Score = score;
+                        }
+                        rdr.Close();
+
+                        lvNodeList.Items.Clear();
+
+                        int rank = 1;
+                        foreach (var node in nodeMap)
+                        {
+                            var lvi = new ListViewItem(rank.ToString());
+                            lvi.SubItems.Add(node.Value.Name);
+                            lvi.SubItems.Add(Convert(node.Value.Score));
+                            lvi.SubItems.Add(Convert(0));
+                            lvi.SubItems.Add(node.Value.Intro);
+                            lvi.Tag = node.Key;
+                            lvNodeList.Items.Add(lvi);
+                            rank++;
+                        }
                     }
                     break;
             }
             SqlCon.Close();
+        }
+
+        public class Node
+        {
+            public string Name;
+            public string Intro;
+            public long Score;
         }
 
         private string Convert(long val)
