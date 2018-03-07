@@ -17,7 +17,7 @@ namespace EOSWallet
 
         private void miAbout_Click(object sender, EventArgs e)
         {
-
+            new FormAbout().ShowDialog();
         }
 
         private void miExit_Click(object sender, EventArgs e)
