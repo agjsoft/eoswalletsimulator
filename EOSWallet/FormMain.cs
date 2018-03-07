@@ -9,6 +9,7 @@ namespace EOSWallet
     public partial class FormMain : Form
     {
         private string SqliteFileName = "eos.db";
+        private SQLiteConnection SqlCon = new SQLiteConnection("Data Source=eos.db");
         private Random Rn = new Random();
         private string[] FirstWord = new string[] { "큰", "작은", "늦은", "늙은", "파란", "빨간", "적은",
             "짧은", "긴", "노란", "검은", "재미있는", "재미없는", "밝은", "어두운", "얇은", "두꺼운", "젊은",
@@ -48,25 +49,40 @@ namespace EOSWallet
             return FirstWord[Rn.Next(0, FirstWord.Length - 1)] + SecondWord[Rn.Next(0, SecondWord.Length - 1)];
         }
 
+        private void RunQuery(string qry)
+        {
+            new SQLiteCommand(qry, SqlCon).ExecuteNonQuery();
+        }
+
         private void FormMain_Load(object sender, EventArgs e)
         {
-            string sql;
-            var map = new Dictionary<string, bool>();
-            bool fileExist = File.Exists(SqliteFileName);
-
-            var con = new SQLiteConnection($"Data Source={SqliteFileName}");
-            con.Open();
-
-            if (false == fileExist)
+            if (false == File.Exists(SqliteFileName))
             {
-                sql =
-                    "CREATE TABLE user" +
-                    "(" +
-                        "Name TEXT PRIMARY KEY," +
+                var map = new Dictionary<string, bool>();
+
+                SqlCon.Open();
+
+                RunQuery(
+                    "CREATE TABLE MyEOS (" +
                         "EOS INTEGER NOT NULL," +
+                        "VTIME DATETIME NOT NULL" +
+                    ")");
+
+                RunQuery($"INSERT INTO MyEOS (EOS, VTIME) VALUES (450000, '{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}')");
+
+                RunQuery(
+                    "CREATE TABLE MyVEOS (" +
                         "VEOS INTEGER NOT NULL" +
-                    ")";
-                new SQLiteCommand(sql, con).ExecuteNonQuery();
+                    ")");
+
+                RunQuery("INSERT INTO MyVEOS (VEOS) VALUES (0)");
+
+                RunQuery(
+                    "CREATE TABLE User (" +
+                        "Id INTEGER PRIMARY KEY," +
+                        "Name TEXT NOT NULL," +
+                        "VEOS INTEGER NOT NULL" +
+                    ")");
 
                 map.Clear();
                 for (int i = 0; i < 300;)
@@ -77,17 +93,15 @@ namespace EOSWallet
 
                     map.Add(name, true);
                     i++;
-                    sql = $"INSERT INTO user (Name, EOS, VEOS) VALUES ('{name}', {Rn.Next(10, 150000)}, {Rn.Next(10, 60000)})";
-                    new SQLiteCommand(sql, con).ExecuteNonQuery();
+                    RunQuery($"INSERT INTO User (Id, Name, VEOS) VALUES ({100 + i}, '{name}', {Rn.Next(15000, 150000)})");
                 }
 
-                sql =
-                    "CREATE TABLE node" +
-                    "(" +
-                        "Name TEXT PRIMARY KEY," +
+                RunQuery(
+                    "CREATE TABLE Node (" +
+                        "Id INTEGER PRIMARY KEY," +
+                        "Name TEXT NOT NULL," +
                         "Intro TEXT NOT NULL" +
-                    ")";
-                new SQLiteCommand(sql, con).ExecuteNonQuery();
+                    ")");
 
                 map.Clear();
                 for (int i = 0; i < 100;)
@@ -98,24 +112,58 @@ namespace EOSWallet
 
                     map.Add(name, true);
                     i++;
-                    sql = $"INSERT INTO node (Name, Intro) VALUES ('{name}', '{name} 노드입니다. 잘 부탁드립니다.')";
-                    new SQLiteCommand(sql, con).ExecuteNonQuery();
+                    RunQuery($"INSERT INTO Node (Id, Name, Intro) VALUES ({2000 + i}, '{name}', '{name} 노드입니다. 잘 부탁드립니다.')");
                 }
 
-                sql =
-                    "CREATE TABLE vote" +
-                    "(" +
-                        "UserName TEXT NOT NULL," +
-                        "NodeName TEXT NOT NULL," +
+                RunQuery(
+                    "CREATE TABLE Vote (" +
+                        "UserId INTEGER NOT NULL," +
+                        "NodeId INTEGER NOT NULL," +
                         "VEOS INTEGER NOT NULL" +
-                    ")";
-                new SQLiteCommand(sql, con).ExecuteNonQuery();
+                    ")");
+
+                SqlCon.Close();
             }
 
-            sql = "";
-            new SQLiteCommand(sql, con).ExecuteNonQuery();
+            tabControl1_SelectedIndexChanged(null, null);
+        }
 
-            con.Close();
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SqlCon.Open();
+            switch (tabControl1.SelectedIndex)
+            {
+                case 0: // 개요
+                    {
+                        long EOS = 0;
+                        long EOSing = 0;
+                        long VEOS = 0;
+                        long VEOSing = 0;
+
+                        var rdr = new SQLiteCommand("SELECT EOS, VTIME FROM My", SqlCon).ExecuteReader();
+                        while (rdr.Read())
+                        {
+                            long value = rdr.GetInt64(0);
+                            DateTime vtime = rdr.GetDateTime(1);
+
+                            if (vtime < DateTime.Now)
+                            {
+
+                            }
+                            else
+                            {
+
+                            }
+                        }
+                    }
+                    break;
+                case 3: // BP 투표
+                    {
+
+                    }
+                    break;
+            }
+            SqlCon.Close();
         }
     }
 }

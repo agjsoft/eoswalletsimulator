@@ -66,6 +66,10 @@
             this.label16 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label18 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -142,10 +146,14 @@
             this.tabControl1.Size = new System.Drawing.Size(804, 506);
             this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabControl1.TabIndex = 1;
+            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             this.tabControl1.MouseEnter += new System.EventHandler(this.tabControl1_MouseEnter);
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.label20);
+            this.tabPage1.Controls.Add(this.label19);
+            this.tabPage1.Controls.Add(this.label18);
             this.tabPage1.Controls.Add(this.panel1);
             this.tabPage1.Controls.Add(this.label17);
             this.tabPage1.Controls.Add(this.label16);
@@ -232,7 +240,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(23, 86);
+            this.label3.Location = new System.Drawing.Point(23, 109);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(57, 12);
             this.label3.TabIndex = 2;
@@ -241,7 +249,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(23, 160);
+            this.label4.Location = new System.Drawing.Point(23, 181);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(33, 12);
             this.label4.TabIndex = 3;
@@ -261,7 +269,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label6.Location = new System.Drawing.Point(123, 86);
+            this.label6.Location = new System.Drawing.Point(123, 108);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(73, 12);
             this.label6.TabIndex = 6;
@@ -271,7 +279,7 @@
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label7.Location = new System.Drawing.Point(123, 160);
+            this.label7.Location = new System.Drawing.Point(123, 181);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(73, 12);
             this.label7.TabIndex = 7;
@@ -289,7 +297,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(202, 86);
+            this.label9.Location = new System.Drawing.Point(202, 108);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(38, 12);
             this.label9.TabIndex = 9;
@@ -298,7 +306,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(202, 160);
+            this.label10.Location = new System.Drawing.Point(202, 181);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(30, 12);
             this.label10.TabIndex = 10;
@@ -310,6 +318,7 @@
             this.columnHeader1,
             this.columnHeader2,
             this.columnHeader3,
+            this.columnHeader5,
             this.columnHeader4});
             this.listView1.Location = new System.Drawing.Point(130, 33);
             this.listView1.Name = "listView1";
@@ -389,7 +398,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(23, 116);
+            this.label15.Location = new System.Drawing.Point(23, 137);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(41, 12);
             this.label15.TabIndex = 11;
@@ -399,7 +408,7 @@
             // 
             this.label16.AutoSize = true;
             this.label16.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label16.Location = new System.Drawing.Point(123, 116);
+            this.label16.Location = new System.Drawing.Point(123, 137);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(73, 12);
             this.label16.TabIndex = 12;
@@ -408,7 +417,7 @@
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(202, 116);
+            this.label17.Location = new System.Drawing.Point(202, 137);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(38, 12);
             this.label17.TabIndex = 13;
@@ -417,10 +426,44 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.DimGray;
-            this.panel1.Location = new System.Drawing.Point(25, 143);
+            this.panel1.Location = new System.Drawing.Point(25, 164);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(214, 2);
             this.panel1.TabIndex = 14;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(23, 80);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(41, 12);
+            this.label18.TabIndex = 15;
+            this.label18.Text = "전환중";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label19.Location = new System.Drawing.Point(123, 80);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(73, 12);
+            this.label19.TabIndex = 16;
+            this.label19.Text = "0.00000000";
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(202, 80);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(30, 12);
+            this.label20.TabIndex = 17;
+            this.label20.Text = "EOS";
+            // 
+            // columnHeader5
+            // 
+            this.columnHeader5.Text = "내 투표수";
+            this.columnHeader5.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.columnHeader5.Width = 70;
             // 
             // FormMain
             // 
@@ -489,6 +532,10 @@
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.ColumnHeader columnHeader5;
     }
 }
 
