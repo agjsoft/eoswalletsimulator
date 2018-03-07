@@ -142,6 +142,7 @@
             this.tabControl1.Size = new System.Drawing.Size(804, 506);
             this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabControl1.TabIndex = 1;
+            this.tabControl1.MouseEnter += new System.EventHandler(this.tabControl1_MouseEnter);
             // 
             // tabPage1
             // 
@@ -436,6 +437,7 @@
             this.MinimizeBox = false;
             this.Name = "FormMain";
             this.Text = "이오스 지갑 시뮬레이터 v 0.1";
+            this.Load += new System.EventHandler(this.FormMain_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
