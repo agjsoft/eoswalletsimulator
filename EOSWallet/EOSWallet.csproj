@@ -76,6 +76,18 @@
     <Compile Include="FormVEOS2EOS.Designer.cs">
       <DependentUpon>FormVEOS2EOS.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormVote.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormVote.Designer.cs">
+      <DependentUpon>FormVote.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormVoteCancel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormVoteCancel.Designer.cs">
+      <DependentUpon>FormVoteCancel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FormAbout.resx">
@@ -89,6 +101,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormVEOS2EOS.resx">
       <DependentUpon>FormVEOS2EOS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormVote.resx">
+      <DependentUpon>FormVote.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormVoteCancel.resx">
+      <DependentUpon>FormVoteCancel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

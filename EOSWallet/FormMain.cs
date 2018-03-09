@@ -221,5 +221,24 @@ namespace EOSWallet
         {
             new FormVEOS2EOS().ShowDialog();
         }
+
+        private void miVote_Click(object sender, EventArgs e)
+        {
+            if (1 != lvNodeList.SelectedItems.Count)
+                return;
+
+            var node = lvNodeList.SelectedItems[0];
+            int nodeId = (int)node.Tag;
+        }
+
+        private void miVoteCancel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cbViewOnlyMyVoted_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

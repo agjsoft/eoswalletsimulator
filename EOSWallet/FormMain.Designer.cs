@@ -59,11 +59,13 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.btnVEOS2EOS = new System.Windows.Forms.Button();
+            this.btnEOS2VEOS = new System.Windows.Forms.Button();
             this.label14 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.cbViewOnlyMyVoted = new System.Windows.Forms.CheckBox();
             this.lvNodeList = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -71,11 +73,9 @@
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.투표하기ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.투표철회하기ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.miVote = new System.Windows.Forms.ToolStripMenuItem();
+            this.miVoteCancel = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.btnEOS2VEOS = new System.Windows.Forms.Button();
-            this.btnVEOS2EOS = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.lbLine.SuspendLayout();
@@ -373,7 +373,7 @@
             this.tabPage4.Controls.Add(this.label13);
             this.tabPage4.Controls.Add(this.label12);
             this.tabPage4.Controls.Add(this.label11);
-            this.tabPage4.Controls.Add(this.checkBox1);
+            this.tabPage4.Controls.Add(this.cbViewOnlyMyVoted);
             this.tabPage4.Controls.Add(this.lvNodeList);
             this.tabPage4.Location = new System.Drawing.Point(4, 49);
             this.tabPage4.Name = "tabPage4";
@@ -381,6 +381,26 @@
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "BP 투표(V)";
             this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // btnVEOS2EOS
+            // 
+            this.btnVEOS2EOS.Location = new System.Drawing.Point(8, 143);
+            this.btnVEOS2EOS.Name = "btnVEOS2EOS";
+            this.btnVEOS2EOS.Size = new System.Drawing.Size(108, 77);
+            this.btnVEOS2EOS.TabIndex = 7;
+            this.btnVEOS2EOS.Text = "VEOS > EOS 전환";
+            this.btnVEOS2EOS.UseVisualStyleBackColor = true;
+            this.btnVEOS2EOS.Click += new System.EventHandler(this.btnVEOS2EOS_Click);
+            // 
+            // btnEOS2VEOS
+            // 
+            this.btnEOS2VEOS.Location = new System.Drawing.Point(8, 58);
+            this.btnEOS2VEOS.Name = "btnEOS2VEOS";
+            this.btnEOS2VEOS.Size = new System.Drawing.Size(108, 77);
+            this.btnEOS2VEOS.TabIndex = 6;
+            this.btnEOS2VEOS.Text = "EOS > VEOS 전환";
+            this.btnEOS2VEOS.UseVisualStyleBackColor = true;
+            this.btnEOS2VEOS.Click += new System.EventHandler(this.btnEOS2VEOS_Click);
             // 
             // label14
             // 
@@ -418,15 +438,16 @@
             this.label11.TabIndex = 2;
             this.label11.Text = "블록 프로듀서 재선정까지";
             // 
-            // checkBox1
+            // cbViewOnlyMyVoted
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(632, 11);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(156, 16);
-            this.checkBox1.TabIndex = 1;
-            this.checkBox1.Text = "내가 투표한 노드만 보기";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.cbViewOnlyMyVoted.AutoSize = true;
+            this.cbViewOnlyMyVoted.Location = new System.Drawing.Point(632, 11);
+            this.cbViewOnlyMyVoted.Name = "cbViewOnlyMyVoted";
+            this.cbViewOnlyMyVoted.Size = new System.Drawing.Size(156, 16);
+            this.cbViewOnlyMyVoted.TabIndex = 1;
+            this.cbViewOnlyMyVoted.Text = "내가 투표한 노드만 보기";
+            this.cbViewOnlyMyVoted.UseVisualStyleBackColor = true;
+            this.cbViewOnlyMyVoted.CheckedChanged += new System.EventHandler(this.cbViewOnlyMyVoted_CheckedChanged);
             // 
             // lvNodeList
             // 
@@ -440,6 +461,7 @@
             this.lvNodeList.FullRowSelect = true;
             this.lvNodeList.GridLines = true;
             this.lvNodeList.Location = new System.Drawing.Point(130, 33);
+            this.lvNodeList.MultiSelect = false;
             this.lvNodeList.Name = "lvNodeList";
             this.lvNodeList.Size = new System.Drawing.Size(658, 378);
             this.lvNodeList.TabIndex = 0;
@@ -477,22 +499,24 @@
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.투표하기ToolStripMenuItem,
-            this.투표철회하기ToolStripMenuItem});
+            this.miVote,
+            this.miVoteCancel});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(147, 48);
             // 
-            // 투표하기ToolStripMenuItem
+            // miVote
             // 
-            this.투표하기ToolStripMenuItem.Name = "투표하기ToolStripMenuItem";
-            this.투표하기ToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.투표하기ToolStripMenuItem.Text = "투표하기";
+            this.miVote.Name = "miVote";
+            this.miVote.Size = new System.Drawing.Size(146, 22);
+            this.miVote.Text = "투표하기";
+            this.miVote.Click += new System.EventHandler(this.miVote_Click);
             // 
-            // 투표철회하기ToolStripMenuItem
+            // miVoteCancel
             // 
-            this.투표철회하기ToolStripMenuItem.Name = "투표철회하기ToolStripMenuItem";
-            this.투표철회하기ToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.투표철회하기ToolStripMenuItem.Text = "투표철회하기";
+            this.miVoteCancel.Name = "miVoteCancel";
+            this.miVoteCancel.Size = new System.Drawing.Size(146, 22);
+            this.miVoteCancel.Text = "투표철회하기";
+            this.miVoteCancel.Click += new System.EventHandler(this.miVoteCancel_Click);
             // 
             // statusStrip1
             // 
@@ -501,26 +525,6 @@
             this.statusStrip1.Size = new System.Drawing.Size(804, 22);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
-            // 
-            // btnEOS2VEOS
-            // 
-            this.btnEOS2VEOS.Location = new System.Drawing.Point(8, 58);
-            this.btnEOS2VEOS.Name = "btnEOS2VEOS";
-            this.btnEOS2VEOS.Size = new System.Drawing.Size(108, 77);
-            this.btnEOS2VEOS.TabIndex = 6;
-            this.btnEOS2VEOS.Text = "EOS > VEOS 전환";
-            this.btnEOS2VEOS.UseVisualStyleBackColor = true;
-            this.btnEOS2VEOS.Click += new System.EventHandler(this.btnEOS2VEOS_Click);
-            // 
-            // btnVEOS2EOS
-            // 
-            this.btnVEOS2EOS.Location = new System.Drawing.Point(8, 143);
-            this.btnVEOS2EOS.Name = "btnVEOS2EOS";
-            this.btnVEOS2EOS.Size = new System.Drawing.Size(108, 77);
-            this.btnVEOS2EOS.TabIndex = 7;
-            this.btnVEOS2EOS.Text = "VEOS > EOS 전환";
-            this.btnVEOS2EOS.UseVisualStyleBackColor = true;
-            this.btnVEOS2EOS.Click += new System.EventHandler(this.btnVEOS2EOS_Click);
             // 
             // FormMain
             // 
@@ -579,7 +583,7 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox cbViewOnlyMyVoted;
         private System.Windows.Forms.ListView lvNodeList;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
@@ -595,8 +599,8 @@
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.ColumnHeader columnHeader5;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem 투표하기ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 투표철회하기ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem miVote;
+        private System.Windows.Forms.ToolStripMenuItem miVoteCancel;
         private System.Windows.Forms.Button btnVEOS2EOS;
         private System.Windows.Forms.Button btnEOS2VEOS;
     }
