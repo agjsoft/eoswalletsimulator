@@ -45,11 +45,13 @@ namespace EOSWallet
             if (dr == DialogResult.Cancel)
                 return;
 
+            long divideAmount = v / Define.ConvertStep;
+            int mod = (int)(v % Define.ConvertStep);
             DB.Open();
             DB.RunQuery($"UPDATE User SET VEOS = VEOS - {v} WHERE Id = {Define.MyUserId}");
-            for (int i = 1; i <= Define.ConvertStep; i++)
+            for (int i = 1; i <= Define.ConvertStep; i++, mod--)
             {
-                DB.RunQuery($"INSERT INTO Me (EOS, VTIME) VALUES ({v / Define.ConvertStep}, '{DateTime.Now.AddSeconds(Define.ConvertTimeSecond * i).ToString("yyyy-MM-dd HH:mm:ss") }')");
+                DB.RunQuery($"INSERT INTO Me (EOS, VTIME) VALUES ({divideAmount + ((0 < mod) ? 1 : 0)}, '{DateTime.Now.AddSeconds(Define.ConvertTimeSecond * i).ToString("yyyy-MM-dd HH:mm:ss") }')");
             }
             DB.Close();
 
