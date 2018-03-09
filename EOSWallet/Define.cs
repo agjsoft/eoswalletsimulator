@@ -19,12 +19,21 @@ namespace EOSWallet
             "북경", "남경", "상하이", "파리", "프랑스", "독일", "베를린", "마드리드", "바다", "육지", "무덤",
             "언어", "직업", "자전거", "자동차", "데이터", "블록원", "댄라이머" };
         private static Random Rn = new Random();
+        private static long[] ConvertArr;
 
         public static void Init()
         {
             SosuConvertValue = 1;
             for (int i = 0; i < Sosuzari; i++)
                 SosuConvertValue *= 10;
+
+            long seed = SosuConvertValue;
+            ConvertArr = new long[Sosuzari + 1];
+            for (int i = 0; i < ConvertArr.Length; i++)
+            {
+                ConvertArr[i] = seed;
+                seed /= 10;
+            }
         }
 
         public static string GetRandomName()
@@ -48,14 +57,7 @@ namespace EOSWallet
             if (Sosuzari < ky.Length)
                 return -1;
 
-            long seed = SosuConvertValue;
-            var arr = new long[Sosuzari + 1];
-            for (int i = 0; i < arr.Length; i++)
-            {
-                arr[i] = seed;
-                seed /= 10;
-            }
-            v += long.Parse(ky) * arr[ky.Length];
+            v += long.Parse(ky) * ConvertArr[ky.Length];
             return v;
         }
 
