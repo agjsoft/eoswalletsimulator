@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace EOSWallet
@@ -158,6 +159,7 @@ namespace EOSWallet
                             string intro = r.GetString(2);
                             nodeMap.Add(id, new Node()
                             {
+                                Id = id,
                                 Name = name,
                                 Intro = intro,
                                 Score = 0,
@@ -179,17 +181,20 @@ namespace EOSWallet
                              nodeMap[id].MyVote = score;
                         });
 
+                        var rankList = nodeMap.Values.ToList();
+                        rankList.Sort(Comparer<Node>.Create((a, b) => b.Score.CompareTo(a.Score)));
+
                         lvNodeList.Items.Clear();
 
                         int rank = 1;
-                        foreach (var node in nodeMap)
+                        foreach (var node in rankList)
                         {
                             var lvi = new ListViewItem(rank.ToString());
-                            lvi.SubItems.Add(node.Value.Name);
-                            lvi.SubItems.Add(Define.Convert(node.Value.Score));
-                            lvi.SubItems.Add(Define.Convert(node.Value.MyVote));
-                            lvi.SubItems.Add(node.Value.Intro);
-                            lvi.Tag = node.Key;
+                            lvi.SubItems.Add(node.Name);
+                            lvi.SubItems.Add(Define.Convert(node.Score));
+                            lvi.SubItems.Add(Define.Convert(node.MyVote));
+                            lvi.SubItems.Add(node.Intro);
+                            lvi.Tag = node.Id;
                             if (rank <= 21)
                             {
                                 lvi.BackColor = Color.Yellow;
@@ -206,6 +211,7 @@ namespace EOSWallet
 
         public class Node
         {
+            public int Id;
             public string Name;
             public string Intro;
             public long Score;
@@ -228,7 +234,7 @@ namespace EOSWallet
                 return;
 
             var node = lvNodeList.SelectedItems[0];
-            int nodeId = (int)node.Tag;
+            new FormVote((int)node.Tag).ShowDialog();
         }
 
         private void miVoteCancel_Click(object sender, EventArgs e)
