@@ -14,5 +14,15 @@ namespace EOSWallet
         {
             Close();
         }
+
+        private void label5_MouseEnter(object sender, EventArgs e)
+        {
+            pictureBox2.Visible = true;
+        }
+
+        private void label5_MouseLeave(object sender, EventArgs e)
+        {
+            pictureBox2.Visible = false;
+        }
     }
 }
