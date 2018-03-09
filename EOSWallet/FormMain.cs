@@ -151,7 +151,7 @@ namespace EOSWallet
 
         private void cbViewOnlyMyVoted_CheckedChanged(object sender, EventArgs e)
         {
-
+            RefreshTabPage(3);
         }
 
         private void RefreshTabPage(int page)
@@ -238,6 +238,12 @@ namespace EOSWallet
                         int rank = 1;
                         foreach (var node in rankList)
                         {
+                            if (cbViewOnlyMyVoted.Checked && 0 == node.MyVote)
+                            {
+                                rank++;
+                                continue;
+                            }
+
                             var lvi = new ListViewItem(rank.ToString());
                             lvi.SubItems.Add(node.Name);
                             lvi.SubItems.Add(Define.Convert(node.Score));
