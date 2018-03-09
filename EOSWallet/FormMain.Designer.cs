@@ -76,6 +76,7 @@
             this.miVote = new System.Windows.Forms.ToolStripMenuItem();
             this.miVoteCancel = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.lbLine.SuspendLayout();
@@ -526,6 +527,10 @@
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
+            // timer1
+            // 
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -603,6 +608,7 @@
         private System.Windows.Forms.ToolStripMenuItem miVoteCancel;
         private System.Windows.Forms.Button btnVEOS2EOS;
         private System.Windows.Forms.Button btnEOS2VEOS;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 

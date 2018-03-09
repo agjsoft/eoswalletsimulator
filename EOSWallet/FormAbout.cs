@@ -17,6 +17,10 @@ namespace EOSWallet
 
         private void label5_MouseEnter(object sender, EventArgs e)
         {
+            Define.EasterEgg++;
+            if (3 < Define.EasterEgg)
+                return;
+
             pictureBox2.Visible = true;
         }
 

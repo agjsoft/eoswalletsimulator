@@ -62,7 +62,7 @@ namespace EOSWallet
                 DB.RunQuery($"INSERT INTO User (Id, Name, VEOS) VALUES ({Define.MyUserId}, '나자신', 0)");
 
                 map.Clear();
-                for (int i = 0; i < 300;)
+                for (int i = 0; i < Define.AIUserCount;)
                 {
                     string name = Define.GetRandomName();
                     if (map.ContainsKey(name))
@@ -76,12 +76,13 @@ namespace EOSWallet
                 DB.RunQuery(
                     "CREATE TABLE Node (" +
                         "Id INTEGER PRIMARY KEY," +
+                        "BP INTEGER NOT NULL," +
                         "Name TEXT NOT NULL," +
                         "Intro TEXT NOT NULL" +
                     ")");
 
                 map.Clear();
-                for (int i = 0; i < 100;)
+                for (int i = 0; i < Define.NodeCount;)
                 {
                     string name = Define.GetRandomName();
                     if (map.ContainsKey(name))
@@ -89,7 +90,7 @@ namespace EOSWallet
 
                     map.Add(name, true);
                     i++;
-                    DB.RunQuery($"INSERT INTO Node (Id, Name, Intro) VALUES ({2000 + i}, '{name}', '{name} 노드입니다. 잘 부탁드립니다.')");
+                    DB.RunQuery($"INSERT INTO Node (Id, BP, Name, Intro) VALUES ({2000 + i}, 0, '{name}', '{name} 노드입니다. 잘 부탁드립니다.')");
                 }
 
                 DB.RunQuery(
@@ -102,7 +103,8 @@ namespace EOSWallet
                 DB.Close();
             }
 
-            tabControl1_SelectedIndexChanged(null, null);
+            RefreshTabPage(0);
+            timer1.Start();
         }
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
@@ -113,6 +115,7 @@ namespace EOSWallet
         public class Node
         {
             public int Id;
+            public bool BP;
             public string Name;
             public string Intro;
             public long Score;
@@ -156,7 +159,6 @@ namespace EOSWallet
 
         private void RefreshTabPage(int page)
         {
-            DB.Open();
             switch (page)
             {
                 case 0: // 개요
@@ -166,6 +168,7 @@ namespace EOSWallet
                         long VEOS = 0;
                         long VEOSing = 0;
 
+                        DB.Open();
                         DB.RunReadQuery("SELECT EOS, VTIME FROM Me", (r) =>
                         {
                             long value = r.GetInt64(0);
@@ -190,6 +193,7 @@ namespace EOSWallet
                         {
                             VEOS = r.GetInt64(0);
                         });
+                        DB.Close();
 
                         lbEOS.Text = Define.Convert(EOS);
                         lbEOSing.Text = Define.Convert(EOSing);
@@ -200,38 +204,7 @@ namespace EOSWallet
                     break;
                 case 3: // BP 투표
                     {
-                        var nodeMap = new Dictionary<int, Node>();
-                        DB.RunReadQuery("SELECT Id, Name, Intro FROM Node", (r) =>
-                        {
-                            int id = r.GetInt32(0);
-                            string name = r.GetString(1);
-                            string intro = r.GetString(2);
-                            nodeMap.Add(id, new Node()
-                            {
-                                Id = id,
-                                Name = name,
-                                Intro = intro,
-                                Score = 0,
-                                MyVote = 0
-                            });
-                        });
-
-                        DB.RunReadQuery("SELECT NodeId, SUM(VEOS) FROM Vote GROUP BY NodeId", (r) =>
-                        {
-                            int id = r.GetInt32(0);
-                            long score = r.GetInt64(1);
-                            nodeMap[id].Score = score;
-                        });
-
-                        DB.RunReadQuery($"SELECT NodeId, VEOS FROM Vote WHERE UserId = {Define.MyUserId}", (r) =>
-                        {
-                            int id = r.GetInt32(0);
-                            long score = r.GetInt64(1);
-                            nodeMap[id].MyVote = score;
-                        });
-
-                        var rankList = nodeMap.Values.ToList();
-                        rankList.Sort(Comparer<Node>.Create((a, b) => b.Score.CompareTo(a.Score)));
+                        var rankList = GetNodeRankList();
 
                         lvNodeList.Items.Clear();
 
@@ -250,7 +223,7 @@ namespace EOSWallet
                             lvi.SubItems.Add(Define.Convert(node.MyVote));
                             lvi.SubItems.Add(node.Intro);
                             lvi.Tag = node.Id;
-                            if (rank <= 21)
+                            if (node.BP)
                             {
                                 lvi.BackColor = Color.Yellow;
                                 lvi.Font = new Font(lvi.Font, FontStyle.Bold);
@@ -261,7 +234,84 @@ namespace EOSWallet
                     }
                     break;
             }
+        }
+
+        private List<Node> GetNodeRankList()
+        {
+            var nodeMap = new Dictionary<int, Node>();
+
+            DB.Open();
+            DB.RunReadQuery("SELECT Id, BP, Name, Intro FROM Node", (r) =>
+            {
+                int id = r.GetInt32(0);
+                int bp = r.GetInt32(1);
+                string name = r.GetString(2);
+                string intro = r.GetString(3);
+                nodeMap.Add(id, new Node()
+                {
+                    Id = id,
+                    BP = (1 == bp),
+                    Name = name,
+                    Intro = intro,
+                    Score = 0,
+                    MyVote = 0
+                });
+            });
+
+            DB.RunReadQuery("SELECT NodeId, SUM(VEOS) FROM Vote GROUP BY NodeId", (r) =>
+            {
+                int id = r.GetInt32(0);
+                long score = r.GetInt64(1);
+                nodeMap[id].Score = score;
+            });
+
+            DB.RunReadQuery($"SELECT NodeId, VEOS FROM Vote WHERE UserId = {Define.MyUserId}", (r) =>
+            {
+                int id = r.GetInt32(0);
+                long score = r.GetInt64(1);
+                nodeMap[id].MyVote = score;
+            });
             DB.Close();
+
+            var rankList = nodeMap.Values.ToList();
+            rankList.Sort(Comparer<Node>.Create((a, b) => b.Score.CompareTo(a.Score)));
+            return rankList;
+        }
+
+        private DateTime RoundStandTime = new DateTime(2018, 1, 1, 0, 0, 0);
+        private int LastRoundId = 0;
+        private int LastRemainSec = 0;
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            int totalSec = (int)(DateTime.Now - RoundStandTime).TotalSeconds;
+            int roundId = totalSec / Define.OneRoundSeconds;
+            if (LastRoundId != roundId)
+            {
+                var rankList = GetNodeRankList();
+                string nodeIdList = "";
+                for (int i = 0; i < Define.BlockProcedureCount; i++)
+                {
+                    nodeIdList += rankList[i].Id + ", ";
+                }
+                nodeIdList = nodeIdList.Substring(0, nodeIdList.Length - 2);
+
+                DB.Open();
+                DB.RunQuery("UPDATE Node SET BP = 0");
+                DB.RunQuery($"UPDATE Node SET BP = 1 WHERE Id IN ({nodeIdList})");
+                DB.Close();
+
+                RefreshTabPage(3);
+
+                LastRoundId = roundId;
+            }
+
+            int remainSec = Define.OneRoundSeconds - (totalSec % Define.OneRoundSeconds);
+            if (LastRemainSec != remainSec)
+            {
+                label12.Text = remainSec.ToString();
+                LastRemainSec = remainSec;
+            }
         }
     }
 }

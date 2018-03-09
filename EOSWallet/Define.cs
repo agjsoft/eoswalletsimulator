@@ -10,6 +10,12 @@ namespace EOSWallet
         public static int ConvertStep = 26;
         public static int ConvertTimeSecond = 60;
         public static int Sosuzari = 8;
+        public static int BlockProcedureCount = 21; // 블럭 프로듀서 수
+        public static int BlockCreateSeconds = 3; // 블럭 생성 소요시간(초)
+        public static int AIUserCount = 300; // AI유저수
+        public static int NodeCount = 100; // 노드수
+
+        public static int OneRoundSeconds;
         public static long SosuConvertValue;
         private static string[] FirstWord = new string[] { "큰", "작은", "늦은", "늙은", "파란", "빨간", "적은",
             "짧은", "긴", "노란", "검은", "재미있는", "재미없는", "밝은", "어두운", "얇은", "두꺼운", "젊은",
@@ -21,6 +27,7 @@ namespace EOSWallet
             "언어", "직업", "자전거", "자동차", "데이터", "블록원", "댄라이머" };
         private static Random Rn = new Random();
         private static long[] ConvertArr;
+        public static int EasterEgg = 0;
 
         public static void Init()
         {
@@ -35,6 +42,7 @@ namespace EOSWallet
                 ConvertArr[i] = seed;
                 seed /= 10;
             }
+            OneRoundSeconds = BlockProcedureCount * BlockCreateSeconds;
         }
 
         public static string GetRandomName()
