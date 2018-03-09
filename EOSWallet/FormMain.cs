@@ -49,7 +49,7 @@ namespace EOSWallet
                         "VTIME DATETIME NOT NULL" +
                     ")");
 
-                DB.RunQuery($"INSERT INTO Me (EOS, VTIME) VALUES (45000000000000, '{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}')");
+                DB.RunQuery($"INSERT INTO Me (EOS, VTIME) VALUES ({Define.InitEOS * Define.SosuConvertValue}, '{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}')");
 
                 DB.RunQuery(
                     "CREATE TABLE User (" +

@@ -46,8 +46,15 @@ namespace EOSWallet
                 return;
 
             DB.Open();
-
+            DB.RunQuery($"UPDATE User SET VEOS = VEOS - {v} WHERE Id = {Define.MyUserId}");
+            for (int i = 1; i <= Define.ConvertStep; i++)
+            {
+                DB.RunQuery($"INSERT INTO Me (EOS, VTIME) VALUES ({v / Define.ConvertStep}, '{DateTime.Now.AddSeconds(Define.ConvertTimeSecond * i).ToString("yyyy-MM-dd HH:mm:ss") }')");
+            }
             DB.Close();
+
+            MessageBox.Show("전환되었습니다.");
+            Close();
         }
     }
 }

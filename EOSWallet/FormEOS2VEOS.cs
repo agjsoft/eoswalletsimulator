@@ -1,11 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace EOSWallet
 {
     public partial class FormEOS2VEOS : Form
     {
+        public class EOSSplit
+        {
+            public int Id;
+            public long Amount;
+        }
+
         private long MyCurrentEOS = 0;
+        private List<EOSSplit> EOSList = new List<EOSSplit>();
 
         public FormEOS2VEOS()
         {
@@ -15,19 +24,24 @@ namespace EOSWallet
         private void FormEOS2VEOS_Load(object sender, EventArgs e)
         {
             DB.Open();
-            MyCurrentEOS = 0;
-            DB.RunReadQuery("SELECT EOS, VTIME FROM Me", (r) =>
+            DB.RunReadQuery("SELECT Id, EOS, VTIME FROM Me", (r) =>
             {
-                long value = r.GetInt64(0);
-                DateTime vtime = r.GetDateTime(1);
+                int id = r.GetInt32(0);
+                long value = r.GetInt64(1);
+                DateTime vtime = r.GetDateTime(2);
 
                 if (vtime < DateTime.Now)
                 {
-                    MyCurrentEOS += value;
+                    EOSList.Add(new EOSSplit()
+                    {
+                        Id = id,
+                        Amount = value
+                    });
                 }
             });
             DB.Close();
 
+            MyCurrentEOS = EOSList.Sum(eos => eos.Amount);
             textBox1.Text = Define.Convert(MyCurrentEOS);
         }
 
@@ -50,12 +64,31 @@ namespace EOSWallet
             if (dr == DialogResult.Cancel)
                 return;
 
+            long vv = v;
             DB.Open();
-
+            foreach (var eos in EOSList)
+            {
+                if (vv < eos.Amount)
+                {
+                    DB.RunQuery($"UPDATE Me SET EOS = EOS - {vv} WHERE Id = {eos.Id}");
+                    break;
+                }
+                else if (vv > eos.Amount)
+                {
+                    DB.RunQuery($"DELETE FROM Me WHERE Id = {eos.Id}");
+                    vv -= eos.Amount;
+                }
+                else
+                {
+                    DB.RunQuery($"DELETE FROM Me WHERE Id = {eos.Id}");
+                    break;
+                }
+            }
             DB.RunQuery($"UPDATE User SET VEOS = VEOS + {v} WHERE Id = {Define.MyUserId}");
-
             DB.Close();
+
             MessageBox.Show("전환되었습니다.");
+            Close();
         }
     }
 }
