@@ -107,8 +107,57 @@ namespace EOSWallet
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            RefreshTabPage(tabControl1.SelectedIndex);
+        }
+
+        public class Node
+        {
+            public int Id;
+            public string Name;
+            public string Intro;
+            public long Score;
+            public long MyVote;
+        }
+
+        private void btnEOS2VEOS_Click(object sender, EventArgs e)
+        {
+            new FormEOS2VEOS().ShowDialog();
+        }
+
+        private void btnVEOS2EOS_Click(object sender, EventArgs e)
+        {
+            new FormVEOS2EOS().ShowDialog();
+        }
+
+        private void miVote_Click(object sender, EventArgs e)
+        {
+            if (1 != lvNodeList.SelectedItems.Count)
+                return;
+
+            var node = lvNodeList.SelectedItems[0];
+            new FormVote((int)node.Tag).ShowDialog();
+            RefreshTabPage(3);
+        }
+
+        private void miVoteCancel_Click(object sender, EventArgs e)
+        {
+            if (1 != lvNodeList.SelectedItems.Count)
+                return;
+
+            var node = lvNodeList.SelectedItems[0];
+            new FormVoteCancel((int)node.Tag).ShowDialog();
+            RefreshTabPage(3);
+        }
+
+        private void cbViewOnlyMyVoted_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void RefreshTabPage(int page)
+        {
             DB.Open();
-            switch (tabControl1.SelectedIndex)
+            switch (page)
             {
                 case 0: // 개요
                     {
@@ -176,9 +225,9 @@ namespace EOSWallet
 
                         DB.RunReadQuery($"SELECT NodeId, VEOS FROM Vote WHERE UserId = {Define.MyUserId}", (r) =>
                         {
-                             int id = r.GetInt32(0);
-                             long score = r.GetInt64(1);
-                             nodeMap[id].MyVote = score;
+                            int id = r.GetInt32(0);
+                            long score = r.GetInt64(1);
+                            nodeMap[id].MyVote = score;
                         });
 
                         var rankList = nodeMap.Values.ToList();
@@ -207,44 +256,6 @@ namespace EOSWallet
                     break;
             }
             DB.Close();
-        }
-
-        public class Node
-        {
-            public int Id;
-            public string Name;
-            public string Intro;
-            public long Score;
-            public long MyVote;
-        }
-
-        private void btnEOS2VEOS_Click(object sender, EventArgs e)
-        {
-            new FormEOS2VEOS().ShowDialog();
-        }
-
-        private void btnVEOS2EOS_Click(object sender, EventArgs e)
-        {
-            new FormVEOS2EOS().ShowDialog();
-        }
-
-        private void miVote_Click(object sender, EventArgs e)
-        {
-            if (1 != lvNodeList.SelectedItems.Count)
-                return;
-
-            var node = lvNodeList.SelectedItems[0];
-            new FormVote((int)node.Tag).ShowDialog();
-        }
-
-        private void miVoteCancel_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void cbViewOnlyMyVoted_CheckedChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }
