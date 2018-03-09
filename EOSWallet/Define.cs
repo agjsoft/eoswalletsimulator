@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 
 namespace EOSWallet
 {
@@ -7,6 +8,8 @@ namespace EOSWallet
         public static int MyUserId = 50;
         public static int ConvertStep = 26;
         public static int ConvertTimeSecond = 60;
+        public static int Sosuzari = 8;
+        public static long SosuConvertValue;
         private static string[] FirstWord = new string[] { "큰", "작은", "늦은", "늙은", "파란", "빨간", "적은",
             "짧은", "긴", "노란", "검은", "재미있는", "재미없는", "밝은", "어두운", "얇은", "두꺼운", "젊은",
             "빠른", "능숙한", "어수룩한", "매력있는", "매력없는", "착한", "나쁜"};
@@ -17,9 +20,43 @@ namespace EOSWallet
             "언어", "직업", "자전거", "자동차", "데이터", "블록원", "댄라이머" };
         private static Random Rn = new Random();
 
+        public static void Init()
+        {
+            SosuConvertValue = 1;
+            for (int i = 0; i < Sosuzari; i++)
+                SosuConvertValue *= 10;
+        }
+
         public static string GetRandomName()
         {
             return FirstWord[Rn.Next(0, FirstWord.Length - 1)] + SecondWord[Rn.Next(0, SecondWord.Length - 1)];
+        }
+
+        public static void ErrorMessageBox(string msg)
+        {
+            MessageBox.Show(msg, "에러", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        public static long Convert(string val)
+        {
+            int idx = val.IndexOf('.');
+            if (idx < 0)
+                return long.Parse(val) * SosuConvertValue;
+
+            long v = long.Parse(val.Substring(0, idx)) * SosuConvertValue;
+            string ky = val.Substring(idx + 1);
+            if (Sosuzari < ky.Length)
+                return -1;
+
+            long seed = SosuConvertValue;
+            var arr = new long[Sosuzari + 1];
+            for (int i = 0; i < arr.Length; i++)
+            {
+                arr[i] = seed;
+                seed /= 10;
+            }
+            v += long.Parse(ky) * arr[ky.Length];
+            return v;
         }
 
         public static string Convert(long val)
@@ -29,11 +66,11 @@ namespace EOSWallet
             int cnt = 0;
             for (int i = chArr.Length - 1; i >= 0; i--, cnt++)
             {
-                if (cnt == 8)
+                if (cnt == Sosuzari)
                     ret = "." + ret;
                 ret = chArr[i] + ret;
             }
-            int v = 9 - ret.Length;
+            int v = Sosuzari - ret.Length + 1;
             for (int i = 0; i < v; i++)
             {
                 if (i == v - 1)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
@@ -43,6 +44,7 @@ namespace EOSWallet
 
                 DB.RunQuery(
                     "CREATE TABLE Me (" +
+                        "Id INTEGER PRIMARY KEY," +
                         "EOS INTEGER NOT NULL," +
                         "VTIME DATETIME NOT NULL" +
                     ")");
@@ -67,7 +69,7 @@ namespace EOSWallet
 
                     map.Add(name, true);
                     i++;
-                    DB.RunQuery($"INSERT INTO User (Id, Name, VEOS) VALUES ({100 + i}, '{name}', {Rn.Next(15000, 150000)})");
+                    DB.RunQuery($"INSERT INTO User (Id, Name, VEOS) VALUES ({100 + i}, '{name}', {Rn.Next(15000, 150000) * Define.SosuConvertValue})");
                 }
 
                 DB.RunQuery(
@@ -185,9 +187,14 @@ namespace EOSWallet
                             var lvi = new ListViewItem(rank.ToString());
                             lvi.SubItems.Add(node.Value.Name);
                             lvi.SubItems.Add(Define.Convert(node.Value.Score));
-                            lvi.SubItems.Add(Define.Convert(0));
+                            lvi.SubItems.Add(Define.Convert(node.Value.MyVote));
                             lvi.SubItems.Add(node.Value.Intro);
                             lvi.Tag = node.Key;
+                            if (rank <= 21)
+                            {
+                                lvi.BackColor = Color.Yellow;
+                                lvi.Font = new Font(lvi.Font, FontStyle.Bold);
+                            }
                             lvNodeList.Items.Add(lvi);
                             rank++;
                         }
