@@ -77,11 +77,18 @@
             this.miVoteCancel = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.lvEOSing = new System.Windows.Forms.ListView();
+            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.label5 = new System.Windows.Forms.Label();
+            this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.miBuildEOSCancel = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.lbLine.SuspendLayout();
             this.tabPage4.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
+            this.contextMenuStrip2.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -159,6 +166,8 @@
             // 
             // lbLine
             // 
+            this.lbLine.Controls.Add(this.label5);
+            this.lbLine.Controls.Add(this.lvEOSing);
             this.lbLine.Controls.Add(this.label20);
             this.lbLine.Controls.Add(this.lbEOSing);
             this.lbLine.Controls.Add(this.label18);
@@ -531,6 +540,55 @@
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // lvEOSing
+            // 
+            this.lvEOSing.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader6,
+            this.columnHeader7});
+            this.lvEOSing.ContextMenuStrip = this.contextMenuStrip2;
+            this.lvEOSing.FullRowSelect = true;
+            this.lvEOSing.GridLines = true;
+            this.lvEOSing.Location = new System.Drawing.Point(386, 53);
+            this.lvEOSing.Name = "lvEOSing";
+            this.lvEOSing.Size = new System.Drawing.Size(306, 256);
+            this.lvEOSing.TabIndex = 18;
+            this.lvEOSing.UseCompatibleStateImageBehavior = false;
+            this.lvEOSing.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader6
+            // 
+            this.columnHeader6.Text = "전환중인 EOS";
+            this.columnHeader6.Width = 140;
+            // 
+            // columnHeader7
+            // 
+            this.columnHeader7.Text = "전환되는 시간";
+            this.columnHeader7.Width = 140;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label5.Location = new System.Drawing.Point(384, 20);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(88, 12);
+            this.label5.TabIndex = 19;
+            this.label5.Text = "전환 진행상태";
+            // 
+            // contextMenuStrip2
+            // 
+            this.contextMenuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.miBuildEOSCancel});
+            this.contextMenuStrip2.Name = "contextMenuStrip2";
+            this.contextMenuStrip2.Size = new System.Drawing.Size(127, 26);
+            // 
+            // miBuildEOSCancel
+            // 
+            this.miBuildEOSCancel.Name = "miBuildEOSCancel";
+            this.miBuildEOSCancel.Size = new System.Drawing.Size(126, 22);
+            this.miBuildEOSCancel.Text = "전환 취소";
+            this.miBuildEOSCancel.Click += new System.EventHandler(this.miBuildEOSCancel_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -555,6 +613,7 @@
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
             this.contextMenuStrip1.ResumeLayout(false);
+            this.contextMenuStrip2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -609,6 +668,12 @@
         private System.Windows.Forms.Button btnVEOS2EOS;
         private System.Windows.Forms.Button btnEOS2VEOS;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ListView lvEOSing;
+        private System.Windows.Forms.ColumnHeader columnHeader6;
+        private System.Windows.Forms.ColumnHeader columnHeader7;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip2;
+        private System.Windows.Forms.ToolStripMenuItem miBuildEOSCancel;
     }
 }
 

@@ -157,6 +157,13 @@ namespace EOSWallet
             RefreshTabPage(3);
         }
 
+        public class EOSSplit
+        {
+            public int Id;
+            public DateTime CompleteTime;
+            public long Amount;
+        }
+
         private void RefreshTabPage(int page)
         {
             switch (page)
@@ -167,16 +174,24 @@ namespace EOSWallet
                         long EOSing = 0;
                         long VEOS = 0;
                         long VEOSing = 0;
+                        var list = new List<EOSSplit>();
 
                         DB.Open();
-                        DB.RunReadQuery("SELECT EOS, VTIME FROM Me", (r) =>
+                        DB.RunReadQuery("SELECT Id, EOS, VTIME FROM Me", (r) =>
                         {
-                            long value = r.GetInt64(0);
-                            DateTime vtime = r.GetDateTime(1);
-
+                            int id = r.GetInt32(0);
+                            long value = r.GetInt64(1);
+                            DateTime vtime = r.GetDateTime(2);
+                            
                             if (DateTime.Now < vtime)
                             {
                                 EOSing += value;
+                                list.Add(new EOSSplit()
+                                {
+                                    Id = id,
+                                    Amount = value,
+                                    CompleteTime = vtime
+                                });
                             }
                             else
                             {
@@ -200,6 +215,27 @@ namespace EOSWallet
                         lbVEOS.Text = Define.Convert(VEOS);
                         lbVEOSing.Text = Define.Convert(VEOSing);
                         lbTotal.Text = Define.Convert(EOS + EOSing + VEOS + VEOSing);
+
+                        lvEOSing.Items.Clear();
+
+                        if (0 < list.Count)
+                        {
+                            label5.Visible = true;
+                            lvEOSing.Visible = true;
+
+                            foreach (var data in list)
+                            {
+                                var lvi = new ListViewItem(Define.Convert(data.Amount));
+                                lvi.SubItems.Add(data.CompleteTime.ToString("yyyy-MM-dd HH:mm:ss"));
+                                lvi.Tag = data.Id;
+                                lvEOSing.Items.Add(lvi);
+                            }
+                        }
+                        else
+                        {
+                            label5.Visible = false;
+                            lvEOSing.Visible = false;
+                        }
                     }
                     break;
                 case 3: // BP 투표
@@ -318,6 +354,31 @@ namespace EOSWallet
                 label12.Text = remainSec.ToString();
                 LastRemainSec = remainSec;
             }
+        }
+
+        private void miBuildEOSCancel_Click(object sender, EventArgs e)
+        {
+            if (0 == lvEOSing.SelectedItems.Count)
+                return;
+
+            string ids = "";
+            foreach (ListViewItem item in lvEOSing.SelectedItems)
+            {
+                ids += (int)item.Tag + ", ";
+            }
+            ids = ids.Substring(0, ids.Length - 2);
+
+            long getVEOS = 0;
+            DB.Open();
+            DB.RunReadQuery($"SELECT SUM(EOS) FROM Me WHERE Id IN ({ids})", r =>
+            {
+                getVEOS = r.GetInt64(0);
+            });
+            DB.RunQuery($"DELETE FROM Me WHERE Id IN ({ids})");
+            DB.RunQuery($"UPDATE User SET VEOS = VEOS + {getVEOS} WHERE Id = {Define.MyUserId}");
+            DB.Close();
+
+            RefreshTabPage(0);
         }
     }
 }
