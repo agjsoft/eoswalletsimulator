@@ -106,6 +106,7 @@ namespace EOSWallet
 
             RefreshTabPage(0);
             timer1.Start();
+            timer2.Start();
         }
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
@@ -380,6 +381,88 @@ namespace EOSWallet
             DB.Close();
 
             RefreshTabPage(0);
+        }
+
+        public class NodeVote
+        {
+            public int Id;
+            public long VEOS;
+        }
+
+        private long GetInt64Random(long max)
+        {
+            return (((long)Rn.Next() * Define.SosuConvertValue + (long)Rn.Next()) % max) + 1;
+        }
+
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            int id = 0;
+            long VEOS = 0;
+
+            DB.Open();
+            DB.RunReadQuery($"SELECT Id, VEOS FROM User WHERE Id != {Define.MyUserId} ORDER BY RANDOM() LIMIT 1", r =>
+            {
+                id = r.GetInt32(0);
+                VEOS = r.GetInt64(1);
+            });
+
+            int rand = Rn.Next() % 100;
+            // 60%의 확률로 투표
+            if (rand < 60)
+            {
+                if (0 < VEOS)
+                {
+                    long voteAmount = GetInt64Random(VEOS);
+                    int nodeId = 0;
+                    DB.RunReadQuery("SELECT Id FROM Node ORDER BY RANDOM() LIMIT 1", r =>
+                    {
+                        nodeId = r.GetInt32(0);
+                    });
+                    int rowCount = 0;
+                    DB.RunReadQuery($"SELECT COUNT(*) FROM Vote WHERE UserId = {id} AND NodeId = {nodeId}", r =>
+                    {
+                        rowCount = r.GetInt32(0);
+                    });
+                    if (0 == rowCount)
+                    {
+                        DB.RunQuery($"INSERT INTO Vote (UserId, NodeId, VEOS) VALUES ({id}, {nodeId}, {voteAmount})");
+                    }
+                    else
+                    {
+                        DB.RunQuery($"UPDATE Vote SET VEOS = VEOS + {voteAmount} WHERE UserId = {id} AND NodeId = {nodeId}");
+                    }
+                    DB.RunQuery($"UPDATE User SET VEOS = VEOS - {voteAmount} WHERE Id = {id}");
+                }
+            }
+            // 40%의 확률로 투표철회
+            else
+            {
+                var voteList = new List<NodeVote>();
+                DB.RunReadQuery($"SELECT NodeId, VEOS FROM Vote WHERE UserId = {id}", r =>
+                {
+                    voteList.Add(new NodeVote()
+                    {
+                        Id = r.GetInt32(0),
+                        VEOS = r.GetInt64(1)
+                    });
+                });
+
+                if (0 < voteList.Count)
+                {
+                    var voteCancelTarget = voteList[Rn.Next() % voteList.Count];
+                    long cancelAmount = GetInt64Random(voteCancelTarget.VEOS);
+                    if (cancelAmount == voteCancelTarget.VEOS)
+                    {
+                        DB.RunQuery($"DELETE FROM Vote WHERE UserId = {id} AND NodeId = {voteCancelTarget.Id}");
+                    }
+                    else
+                    {
+                        DB.RunQuery($"UPDATE Vote SET VEOS = VEOS - {cancelAmount} WHERE UserId = {id} AND NodeId = {voteCancelTarget.Id}");
+                    }
+                    DB.RunQuery($"UPDATE User SET VEOS = VEOS + {cancelAmount} WHERE Id = {id}");
+                }
+            }
+            DB.Close();
         }
     }
 }

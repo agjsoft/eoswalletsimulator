@@ -83,6 +83,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.miBuildEOSCancel = new System.Windows.Forms.ToolStripMenuItem();
+            this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.lbLine.SuspendLayout();
@@ -589,6 +590,11 @@
             this.miBuildEOSCancel.Text = "전환 취소";
             this.miBuildEOSCancel.Click += new System.EventHandler(this.miBuildEOSCancel_Click);
             // 
+            // timer2
+            // 
+            this.timer2.Interval = 900;
+            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -674,6 +680,7 @@
         private System.Windows.Forms.ColumnHeader columnHeader7;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip2;
         private System.Windows.Forms.ToolStripMenuItem miBuildEOSCancel;
+        private System.Windows.Forms.Timer timer2;
     }
 }
 
