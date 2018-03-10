@@ -274,7 +274,13 @@ namespace EOSWallet
             DB.Close();
 
             var rankList = nodeMap.Values.ToList();
-            rankList.Sort(Comparer<Node>.Create((a, b) => b.Score.CompareTo(a.Score)));
+            rankList.Sort(Comparer<Node>.Create((a, b) =>
+            {
+                if (a.Score == b.Score)
+                    return a.Name.CompareTo(b.Name);
+                else
+                    return b.Score.CompareTo(a.Score);
+            }));
             return rankList;
         }
 
