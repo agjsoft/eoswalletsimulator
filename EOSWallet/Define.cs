@@ -5,6 +5,7 @@ namespace EOSWallet
 {
     public static class Define
     {
+        public static string ApplicationVersion = "0.2";
         public static int MyUserId = 50;
         public static int InitEOS = 450000; // 처음 실행시 지급되는 EOS 양
         public static int ConvertStep = 26;

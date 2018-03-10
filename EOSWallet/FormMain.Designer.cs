@@ -603,7 +603,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormMain";
-            this.Text = "이오스 지갑 시뮬레이터 v 0.1";
+            this.Text = "이오스 지갑 시뮬레이터 v";
             this.Load += new System.EventHandler(this.FormMain_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();

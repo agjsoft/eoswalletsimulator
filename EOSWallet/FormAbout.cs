@@ -8,6 +8,7 @@ namespace EOSWallet
         public FormAbout()
         {
             InitializeComponent();
+            label1.Text += Define.ApplicationVersion;
         }
 
         private void btnOK_Click(object sender, EventArgs e)

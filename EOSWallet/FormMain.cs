@@ -14,6 +14,7 @@ namespace EOSWallet
         public FormMain()
         {
             InitializeComponent();
+            Text += Define.ApplicationVersion;
         }
 
         private void miAbout_Click(object sender, EventArgs e)

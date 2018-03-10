@@ -64,9 +64,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(266, 32);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(187, 12);
+            this.label1.Size = new System.Drawing.Size(171, 12);
             this.label1.TabIndex = 2;
-            this.label1.Text = "이오스 지갑 시뮬레이터 버전 v0.1";
+            this.label1.Text = "이오스 지갑 시뮬레이터 버전 v";
             // 
             // label2
             // 
