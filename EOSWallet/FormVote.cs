@@ -67,5 +67,11 @@ namespace EOSWallet
             MessageBox.Show("투표되었습니다.");
             Close();
         }
+
+        private void textBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                btnOK_Click(null, null);
+        }
     }
 }
